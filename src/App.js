@@ -1,21 +1,31 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import GamePage from './pages/GamePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import ProfilePage from './pages/ProfilePage';
+import { getCurrentUser } from './services/authService';
 
 const App = () => {
+  const user = getCurrentUser();
+
   return (
     <Router>
-      <div>
-        <Routes>
-          <Route path="/game" element={<GamePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-        </Routes>
-      </div>
+      <Routes>
+        {user ? (
+          <>
+            <Route path="/" element={<Navigate to="/game" />} />
+            <Route path="/game" element={<GamePage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+          </>
+        ) : (
+          <>
+            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+          </>
+        )}
+      </Routes>
     </Router>
   );
 };
