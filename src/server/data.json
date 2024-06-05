@@ -1,1 +1,1 @@
-{"email":"dummy@example.com","password":"dummypassword","undefined":{},"banan@gmail.com":{"email":"banan@gmail.com","password":"banana"}}
+{"email":"dummy@example.com","password":"dummypassword","undefined":{"gameProgress":{"error":"No saved game found"}},"banan@gmail.com":{"email":"banan@gmail.com","password":"banana"}}

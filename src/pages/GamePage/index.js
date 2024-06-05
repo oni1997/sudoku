@@ -27,8 +27,13 @@ const GamePage = () => {
 
   const handleBoardChange = (newBoard) => {
     setBoard(newBoard);
+    // Save the game progress when the board changes
     saveGameProgress(user.email, newBoard);
     setSolved(isSolved(newBoard));
+  };
+
+  const handleSaveButtonClick = () => {
+    saveGameProgress(user.email, board);
   };
 
   return (
@@ -36,6 +41,7 @@ const GamePage = () => {
       <h1>Sudoku Game</h1>
       {solved && <p>Congratulations! You solved the puzzle.</p>}
       <SudokuBoard board={board} onBoardChange={handleBoardChange} />
+      <button onClick={handleSaveButtonClick}>Save</button>
     </div>
   );
 };

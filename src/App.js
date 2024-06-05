@@ -1,9 +1,11 @@
 import React from 'react';
+import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import GamePage from './pages/GamePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import ProfilePage from './pages/ProfilePage';
+
 import { getCurrentUser } from './services/authService';
 
 const App = () => {
