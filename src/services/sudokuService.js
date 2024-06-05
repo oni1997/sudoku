@@ -19,7 +19,7 @@ export const isSolved = (board) => {
 
 export const saveGameProgress = async (userId, board) => {
   try {
-    const response = await fetch('/api/saveGameProgress', {
+    const response = await fetch('http://localhost:3001/api/saveGameProgress', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -37,7 +37,7 @@ export const saveGameProgress = async (userId, board) => {
 
 export const loadGameProgress = async (userId) => {
   try {
-    const response = await fetch(`/api/loadGameProgress/${userId}`);
+    const response = await fetch(`http://localhost:3001/api/loadGameProgress/${userId}`);
     const board = await response.json();
     return board;
   } catch (error) {

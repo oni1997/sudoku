@@ -4,28 +4,30 @@ import { generateNewPuzzle, loadGameProgress, saveGameProgress, isSolved } from 
 import { getCurrentUser } from '../../services/authService';
 
 const GamePage = () => {
-  const [board, setBoard] = useState([]);
+  const [board, setBoard] = useState(Array(9).fill(null).map(() => Array(9).fill(null)));
   const [solved, setSolved] = useState(false);
   const user = getCurrentUser();
 
   useEffect(() => {
     const loadGame = async () => {
-      const savedGame = await loadGameProgress(user.id);
-      if (savedGame) {
-        setBoard(savedGame);
-        setSolved(isSolved(savedGame));
-      } else {
-        const newPuzzle = generateNewPuzzle();
-        setBoard(newPuzzle);
-        setSolved(isSolved(newPuzzle));
+      if (user) {
+        const savedGame = await loadGameProgress(user.email);
+        if (savedGame) {
+          setBoard(savedGame);
+          setSolved(isSolved(savedGame));
+        } else {
+          const newPuzzle = generateNewPuzzle();
+          setBoard(newPuzzle);
+          setSolved(isSolved(newPuzzle));
+        }
       }
     };
     loadGame();
-  }, [user.id]);
+  }, [user]);
 
   const handleBoardChange = (newBoard) => {
     setBoard(newBoard);
-    saveGameProgress(user.id, newBoard);
+    saveGameProgress(user.email, newBoard);
     setSolved(isSolved(newBoard));
   };
 

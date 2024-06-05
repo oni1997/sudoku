@@ -32,7 +32,9 @@ export const login = async (email, password) => {
     });
 
     if (response.ok) {
-      return await response.json();
+      const data = await response.json();
+      localStorage.setItem('user', JSON.stringify(data)); // Store user data in localStorage
+      return data;
     } else {
       const error = await response.json();
       throw new Error(error.error);
@@ -44,5 +46,9 @@ export const login = async (email, password) => {
 };
 
 export const getCurrentUser = () => {
-  return null;
+  return JSON.parse(localStorage.getItem('user'));
+};
+
+export const logout = () => {
+  localStorage.removeItem('user');
 };

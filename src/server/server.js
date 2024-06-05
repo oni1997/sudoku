@@ -56,3 +56,25 @@ const saveUserData = () => {
 app.listen(3001, () => {
   console.log('Server is running on port 3001');
 });
+
+app.post('/api/saveGameProgress', (req, res) => {
+  const { userId, board } = req.body;
+  if (!userData[userId]) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  userData[userId].gameProgress = board;
+  saveUserData();
+
+  res.status(200).json({ message: 'Game progress saved' });
+});
+
+// Load game progress
+app.get('/api/loadGameProgress/:userId', (req, res) => {
+  const userId = req.params.userId;
+  if (!userData[userId] || !userData[userId].gameProgress) {
+    return res.status(404).json({ error: 'No saved game found' });
+  }
+
+  res.status(200).json(userData[userId].gameProgress);
+});
