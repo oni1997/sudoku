@@ -1,70 +1,176 @@
-# Getting Started with Create React App
+## Sudoku Game Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a Sudoku game application built with React. It allows users to generate new puzzles, save their progress, and continue from where they left off. Users can also log in and out of the application.
 
-## Available Scripts
+### Table of Contents
+- [Features](#features)
+- [Architecture](#architecture)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Communication Flow](#communication-flow)
+- [License](#license)
 
-In the project directory, you can run:
+### Features
+- User authentication
+- Generate new Sudoku puzzles
+- Save and load game progress
+- Detect if the Sudoku puzzle is solved
+- Responsive UI
 
-### `npm start`
+### Architecture
+The application is structured as follows:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```
++---------+        +----------------------+        +-----------------+
+|  User   | <----> |    User Interface    | <----> |   React State   |
++---------+        +----------------------+        +-----------------+
+                       |       |        |                             
+                       |       |        |                             
+             +-----------------+        |                             
+             |                          |                             
+      +--------------+       +-------------------+                    
+      | SudokuBoard  |       |  GamePage Logic   |                    
+      +--------------+       +-------------------+                    
+                              |       |       |                       
+                              |       |       |                       
+             +----------------+       |       |                       
+             |                        |       |                       
++-----------------+    +-----------------+    +-------------------+   
+| Sudoku Service  |    |  Auth Service   |    |  Backend Server   |   
++-----------------+    +-----------------+    +-------------------+   
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Installation
+1. Clone the repository:
+    ```
+    git clone https://git@github.com:oni1997/sudoku.git
+    cd sudoku-game
+    ```
 
-### `npm test`
+2. Install dependencies:
+    ```
+    npm install
+    ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. Set up the backend server (assuming a Node.js backend):
+    - Navigate to the backend directory:
+      ```
+      cd backend
+      ```
+    - Install backend dependencies:
+      ```
+      npm install
+      ```
+    - Start the backend server:
+      ```
+      npm start
+      ```
 
-### `npm run build`
+4. Start the React application:
+    ```
+    npm start
+    ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Usage
+- Navigate to `http://localhost:3000` in your web browser.
+- Log in or create a new account.
+- Generate a new Sudoku puzzle or continue from your last saved game.
+- Use the save button to save your progress.
+- Log out when you are done.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Project Structure
+```
+sudoku-game/
+├── public/
+│   └── index.html
+├── src/
+│   ├── components/
+│   │   ├── LoginForm/
+│   │   │   └── index.js
+│   │   ├── Profile/
+│   │   │   └── index.js
+│   │   ├── SignupForm/
+│   │   │   └── index.js
+│   │   ├── SudokuBoard/
+│   │   │   ├── index.js
+│   │   │   └── SudokuCell/
+│   │   │       └── index.js
+│   │   └── SudokuCell/
+│   │       └── index.js
+│   ├── pages/
+│   │   ├── GamePage/
+│   │   │   └── index.js
+│   │   ├── LoginPage/
+│   │   │   └── index.js
+│   │   ├── ProfilePage/
+│   │   │   └── index.js
+│   │   └── SignupPage/
+│   │       └── index.js
+│   ├── server/
+│   │   ├── data.json
+│   │   └── server.js
+│   ├── services/
+│   │   ├── authService.js
+│   │   ├── data.json
+│   │   └── sudokuService.js
+│   ├── utils/
+│   │   └── sudokuUtils.js
+│   ├── App.css
+│   ├── App.js
+│   ├── App.test.js
+│   ├── index.css
+│   ├── index.js
+│   ├── logo.svg
+│   ├── reportWebVitals.js
+│   └── setupTests.js
+├── .gitignore
+├── package-lock.json
+├── package.json
+├── README.md
+└── webpack.config.js
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Communication Flow
+1. **User**:
+   - Interacts with the UI (User Interface)
 
-### `npm run eject`
+2. **User Interface**:
+   - `GamePage` component
+     - Handles user interactions
+     - Displays the Sudoku board (`SudokuBoard` component)
+     - Buttons for saving progress and logging out
+     - Fetches initial game state on load
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. **React Components**:
+   - `GamePage` component
+     - Uses `useEffect` to load game data on mount
+     - Uses `useState` to manage `board`, `solution`, and `solved` states
+     - Calls `loadGameProgress`, `saveGameProgress`, `generateNewPuzzle`, and `isSolved` from the Sudoku service
+   - `SudokuBoard` component
+     - Displays the Sudoku puzzle
+     - Communicates board changes back to `GamePage`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. **Sudoku Service**:
+   - `generateNewPuzzle()`
+     - Generates a new Sudoku puzzle and its solution
+   - `loadGameProgress(email)`
+     - Loads saved game progress for a user
+   - `saveGameProgress(email, { board, solution })`
+     - Saves the current game state for a user
+   - `isSolved(board)`
+     - Checks if the current board is solved
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+5. **Auth Service**:
+   - `getCurrentUser()`
+     - Retrieves the currently logged-in user
+   - `logout()`
+     - Logs out the current user
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+6. **Backend Server** (assumed as part of the system):
+   - Handles requests to:
+     - Load game progress
+     - Save game progress
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### License
+This project is licensed under the MIT License. See the LICENSE file for more details.
