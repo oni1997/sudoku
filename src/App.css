@@ -10,6 +10,36 @@ body {
   padding: 20px;
 }
 
+.sudoku-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.sudoku-row {
+  display: flex;
+}
+
+.sudoku-cell {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+.sudoku-cell.incorrect {
+  background-color: #fdd;
+}
+
+h1, p {
+  text-align: center;
+}
+
+button {
+  margin: 10px;
+}
+
 /* Header */
 header {
   background-color: #333;
